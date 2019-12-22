@@ -1,0 +1,60 @@
+
+{
+    "lang": "中文",
+    "desc": "YOHITRIP IS A ONE-STEP B2B DIRECT BOOKING PLATFORM.<br/>WE OFFER A VARIETY OF EUROPEAN TOURING<br/>RESOURCES, INCLUDING HOTELS, TOURING COACHES, TOUR GUIDES,<br/>ATTRACTION TICKETS, RESTAURANTS, ENTERTAINMENTS,<br/>BUSINESS TRIP PLANS, OVERSEAS STUDY TOURS, ETC.",
+    "vice-desc": "With 8-year rich experiences in the European market,<br/>we serve over 10,000 tour groups each year",
+    "nav_no": ["Home","Core advantages","Cooperation partner ","About us","Join us","Contact us"],                                      
+    "home": {
+        "advantages": {
+            "title": "Core advantages",
+            "items": ["Direct booking of European<br/>hotels","Intelligent matching and booking of<br/>drivers and tours","Direct booking touring coaches","Special European resources booking,<br/>including entertainments, business trips,<br/>overseas study tours, etc."],
+            "core": ["One-step destination resources<br/>procurement and intelligence<br/>itinerary planning","Artificial intelligence<br/>algorithm + local<br/>travelling expertise"]
+        },
+        "Details": {
+            "title": "Details about our advantages",
+            "items": [
+                {"title": "Itinerary assistant","desc": "Intelligent matching resources with<br/>clients’ needs, auto price calculating,<br/>and effective itinerary generating"},
+                {"title": "Coach and tour guide services","desc": "Accurate matching clients’ needs with<br/>appropriate services, including car rent<br/>charged by the day, pick up and drop off<br/>services provided by Chinese speaking staff,<br/>pay per view, and over 5,000 strictly<br/>selected tour guides and drivers available"},
+                {"title": "Hotel booking","desc": "Direct booking of over 200,000 European<br/>hotels with exclusive discounts (at least<br/>20% off) of over 20,000 hotels"},
+                {"title": "Touring coach booking","desc": "Over 6 years coach-booking experiences,<br/>exclusive 600+ touring coach resources"},
+                {"title": "Entertainment programs<br/>reservations","desc": "Direct booking tickets of over 200 popular<br/>local attractions and reserving over 500<br/>Michelin-starred restaurants"},
+                {"title": "Business trip, overseas study<br/>tour and other special resources<br/>booking","desc": "Customized schedule of over 1,000 local<br/>industrial exhibitions in Europe, official visit,<br/>business training/2000+ special resources<br/>booking (red wine, equestrian, soccer,<br/>fine arts, etc.)"}
+            ]
+        },
+        "clients": {
+            "title": "Our clients",
+            "items": ["Traditional travel agency wholesalers<br/>Big travel agencies<br/>Outbound travel companies","Outbound travel agencies, itinerary planners<br/>Overseas destination management companies, <br/>business trip and overseas study tour service agencies<br/>State-owned enterprises and institutions","European local drivers and tour guides"]
+        },
+        "partner": "Cooperation partner",
+        "aboutUs": {
+            "title": "About us",
+            "desc": [
+                "Yohitrip is a subsidiary of Sichuan Haiwujiang Information Technology Limited Company, which is an overseas tourism B2B E-commerce technology company and<br/>headquartered in Chengdu, Sichuan, China. Yohitrip is and outbound travel e-commerce B2B platform in preparation and has received 20 million venture investment.",
+                "Yohitrip is a young, energetic, and creative team, and is passionate in the travel carrier. ",
+                "Our team members consist of previous employees from E-Bay, Sohu, Ctrip, Accenture and other big internet IT companies, tour technology companies and traditional<br/>famous destination management companies "
+            ],
+            "cultures": {
+                "title": "Team cultures",
+                "items": ["WORK HARD","HAVE FUN","MAKE HISTORY"]
+            },
+            "values": {
+                "title": "Core values",
+                "items": [ "Customer first","Team collaboration","Facing changes","Integrity","Passion","Professionalization" ]
+            }
+        },
+        "joinUs": {
+            "title": "Join us",
+            "desc": "Looking forward to meeting you",
+            "link": "See more"
+        },
+        "contact": {
+            "title": "Contact us",
+            "name": "Sichuan Haiwujiang Information Technology<br/>Limited Company",
+            "address": "T3-1816 Future Plaza, High-tech district, Chengdu,<br/>Sichuan, China",
+            "tell": "Tell: +86 17628007528, 09:30 - 18:30, (available from<br/>Monday to Friday, except national holidays)",
+            "email": "Email:  huangxiao@yohitrip.com",
+            "bottom": ["Hotline: +86 17628007528","Media interview: huangxiao@yohitrip.com","Business and tourism cooperation:<br/>bd@yohitrip.com"]
+        },
+        "footer":["Copyright ©2019 yohitrip.com All Rights Reserved","Sichuan Haiwujiang Information Technology Limited Company，all right reserved ICP 19016982 -1"]
+    }
+}
