@@ -115,6 +115,7 @@ import HotelCalendar from '~/components/hotel/HotelCalendar';
 import BookHotel from '~/components/common/AmpleCalender';
 import { ChildrenAgeList } from '~/assets/js/hotel'
 import { api_location, api_hotel } from '~/service/api'; 
+import { mapState, mapMutations } from 'vuex';
 export default {
     name: 'HisSearchHotel',
     components: {
@@ -126,6 +127,7 @@ export default {
         cityName: Object, // 城市、国家名，面包屑使用
     },
     computed: {
+        ...mapState('hotel', [ 'search' ]),
         nightNum() {
             // 入住多少晚
             if(this.form.checkInDate && this.form.checkOutDate) {
@@ -171,6 +173,7 @@ export default {
         this.getNationList();
     },
     methods: {
+        ...mapMutations('hotel', [ 'SET_SEARCH' ]),
         changeVisible() {
             this.$refs.date.visible = !this.$refs.date.visible;
         },
@@ -198,7 +201,7 @@ export default {
                 this.$Message.error({ content: '请选择入住日期', duration: 1.5 });
                 return;
             }
-            this.mixin_m_SStorage('set', 'hotel_search', this.form);
+            this.SET_SEARCH(this.form);
             let form = this.formatForm();
             this.$emit('search', form);
         },
@@ -251,8 +254,7 @@ export default {
                 .then(res=>{
                     if(res.success){
                         this.nationList = res.data;
-                        let search = this.mixin_m_SStorage('get', 'hotel_search');
-                        if(search && search.nationality) {
+                        if(this.search && search.nationality) {
                             this.form.nationality = search.nationality;
                         }
                     }
@@ -293,16 +295,14 @@ export default {
             });
         },
         initForm() {
-            let search = this.mixin_m_SStorage('get', 'hotel_search');
-            if (search) {
+            if (this.search) {
                 // 必须初始化数据避免过多表单验证
-                this.form = { ...search };
+                this.form = { ...this.search };
             }
         },
         removeHotelId(){ // 避免从sessionStorage初始化后一直存在
             this.form.hotelId = '';
             this.form.hotelName = "";
-            this.mixin_m_SStorage('get', 'hotel_search')
         },
         changeDestination(value, selectedData){
             let cityName = {

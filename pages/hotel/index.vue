@@ -1,6 +1,6 @@
 <template>
     <div class="hotel">
-        <HisSearchHotel :init="searchInit" ref="search" @search="search" />
+        <HisSearchHotel :init="searchInit" ref="search" @search="searchHotel" />
         <div class="browsed" v-if="logined&&hotelHistory.length>0">
             <h3>浏览历史</h3>
             <Carousel :dots="'none'">
@@ -21,7 +21,7 @@
 
 <script>
 import HisSearchHotel from '~/components/hotel/HisSearchHotel';
-import { mapState } from 'vuex';
+import { mapState, mapMutations } from 'vuex';
 import { api_hotel } from '~/service/api';
 export default {
     layout: 'fixedNav',
@@ -41,11 +41,13 @@ export default {
     },
     computed: {
         ...mapState('login', [ 'logined' ]),
+        ...mapState('hotel', [ 'search', 'history' ]),
         splitReservedHotel() {
             return this.splitArry(this.reservedHotel, 3);
         },
     },
     methods: {
+        ...mapMutations('hotel', [ 'SET_SEARCH', 'SET_HISTORY' ]),
         splitArry(list = [], cl) {
             const len = Math.ceil(list.length / cl);
             let arr = [];
@@ -54,18 +56,18 @@ export default {
             }
             return arr;
         },
-        search(form) {
+        searchHotel(form) {
             this.$nuxt.$router.push({ name: 'hotel-search' });
         },
         getHistory() {
-             const arr = this.mixin_m_LStorage('get', 'hotel_history');
+             const arr = this.history;
             this.hotelHistory = this.splitArry(arr, 5);
         },
         remove(index, i) {
-            let arr = this.mixin_m_LStorage('get', 'hotel_history');
+            let arr = this.history;
             const position = index * 5 + i;
             arr.splice(position,1);
-            this.mixin_m_LStorage('set', 'hotel_history', arr);
+            this.SET_HISTORY('hotel_history', arr);
             this.hotelHistory = this.splitArry(arr, 5);
 
         },
@@ -78,7 +80,7 @@ export default {
             let mt = new Date(y, m, d + 1);
             data.checkInDate = this.mixin_m_formatDate(time);
             data.checkOutDate = this.mixin_m_formatDate(mt);
-            this.mixin_m_SStorage('set','hotel_search', data);
+            this.SET_SEARCH(data);
             this.$nuxt.$router.push({ name: 'hotel-search' });
         },
         getSearchLogs() {

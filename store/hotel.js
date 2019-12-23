@@ -13,6 +13,8 @@ export const state = ()=>({
     YHOrderpre: null, // 游海团房预定准备信息
     member: null, // 订单填写页入住成员信息，用于限制入住人信息填写
     payInfo: null,
+    search: {}, // 酒店搜索关键字
+    history: [], // 酒店浏览历史
 })
 
 export const mutations = {
@@ -31,6 +33,12 @@ export const mutations = {
     },
     SET_ORDER(state, data) {
         state.payInfo = data;
+    },
+    SET_SEARCH(state, data) {
+        state.search = data;
+    },
+    SET_HISTORY(state, data) {
+        state.history = history;
     },
 }
 
