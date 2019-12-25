@@ -115,6 +115,7 @@ import HotelCalendar from '~/components/hotel/HotelCalendar';
 import BookHotel from '~/components/common/AmpleCalender';
 import { ChildrenAgeList } from '~/assets/js/hotel'
 import { api_location, api_hotel } from '~/service/api'; 
+import { API_LOCATION } from 'assets/api/public'
 import { mapState, mapMutations } from 'vuex';
 export default {
     name: 'HisSearchHotel',
@@ -227,8 +228,7 @@ export default {
             this.form.checkOutDate = arr[1];
         },
         getCountryList() {
-            // 获取国家列表
-            this.$axios.get(api_location.allCountry)
+            this.$axios({...API_LOCATION.allCountry})
                 .then(res => {
                     if (res.success) {
                         this.countryList = res.data.list;
@@ -250,7 +250,7 @@ export default {
                 })
         },
         getNationList(){
-            this.$axios.get(api_location.nationList)
+            this.$axios({...API_LOCATION.nationList, params: {id:333}})
                 .then(res=>{
                     if(res.success){
                         this.nationList = res.data;

@@ -82,6 +82,7 @@ module.exports = {
       ssr: true
     },
     '~/plugins/mixin',
+    '~/plugins/axios',
   ],
   /*
    ** Nuxt.js dev-modules
@@ -104,7 +105,7 @@ module.exports = {
   axios: {
     proxy: true,
     // prefix: '/api/web/api', // web/api是WEB接口公共部分
-    // credentials: true,
+    // credentials: true, // 是否创建axios实例，true可在ssr模式在请求头添加authentication
   },
   proxy: {
     '/client': {
