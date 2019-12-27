@@ -1,6 +1,6 @@
 <template>
     <div class="hotel">
-        <HisSearchHotel :init="searchInit" ref="search" @search="searchHotel" />
+        <HisSearchHotel ref="search" @search="searchHotel" />
         <div class="browsed" v-if="logined&&hotelHistory.length>0">
             <h3>浏览历史</h3>
             <Carousel :dots="'none'">
@@ -30,8 +30,6 @@ export default {
     },
     data() {
         return {
-            searchInit: {
-            },
             hotelHistory: [],
         };
     },
@@ -57,6 +55,8 @@ export default {
             return arr;
         },
         searchHotel(form) {
+            this.SET_SEARCH(form);
+            this.mixin_m_SStorage('set', 'hotel_search', form);
             this.$nuxt.$router.push({ name: 'hotel-search' });
         },
         getHistory() {

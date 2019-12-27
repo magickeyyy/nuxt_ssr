@@ -123,23 +123,61 @@
 <script>
 import HisSearchHotel from '~/components/hotel/HisSearchHotel';
 import { api_hotel } from '~/service/api';
+import { API_HOTEL } from '~/assets/api/hotel';
 import ExtraCondition from '~/components/hotel/ExtraCondition';
+import { mapState, mapMutations } from 'vuex';
 export default {
-    key(route) {
-        route.meta['login'] = false;
+    validate({ store }) {
+        if(!store.state.hotel.hotel_search || !store.state.hotel.hotel_search.bookingQuantity) return false;
+        return true;
     },
     components: {
         HisSearchHotel,
         ExtraCondition,
     },
-    data() {
+    async asyncData({isStatic, isDev, redirect, store, $axios}) {
+        let hotelList = [];
+        let pageNo = 1;
+        let pageSize = 10;
+        let total = 0;
+        let form = {};
+        Object.keys(store.state.hotel.hotel_search).map(v => {
+            if (v !== 'destination') {
+                form[v] = store.state.hotel.hotel_search[v];
+            } else {
+                form['countryId'] = store.state.hotel.hotel_search.destination[0]*1;
+                form['cityId'] = store.state.hotel.hotel_search.destination[1]*1;
+            }
+            if(v === 'childAge') {
+                form[v] = store.state.hotel.hotel_search[v].join(',');
+            }
+        });
+        form['pageNo'] = pageNo;
+        form['pageSize'] = pageSize;
+        if(JSON.stringify(store.state.hotel.hotel_search) !== "{}") {
+            await $axios({...API_HOTEL.searchHotel, data: form}).then(res => {
+                if (res.success) {
+                    total = res.data.total * 1;
+                    hotelList = res.data.records.map(v => {
+                        v['supportFacilities'] =
+                            v.supportFacilities && v.supportFacilities.length > 0
+                                ? v.supportFacilities.split(',').slice(0, 2)
+                                : [];
+                        v.ratings = (v.ratings / 10).toFixed(1);
+                        v['logined'] = store.state.hotel.logined;
+                        v.star = Number(v.star);
+                        return v;
+                    });
+                }
+            });
+        }
         return {
-            hotelList: [], // 搜索结果
-            pageNo: 1,
-            pageSize: 10,
+            hotelList, // 搜索结果
+            pageNo,
+            pageSize,
             order: 'asc', // asc：lowestPrice或ratings从低到高，desc从高到低
             sidx: '', //'':智能排序，lowestPrice以价格排序，ratings以星级/评分排序
-            total: 0, // 搜索结果总数
+            total, // 搜索结果总数
             // 通过query接收的参数再传给搜索组件
             searchInit: {}, // 从sessionStorage中取值
             selected: ['', '', ''],
@@ -148,19 +186,14 @@ export default {
             mapMarks: '&markers=size:tiny%color:red%7Clabel:P%7C',
             cityName: {}, // 搜索地城市，面包屑、地图中心
             extra: {}, // 左侧额外搜索条件
-            form: {}, // 表单
-        };
-    },
-    created() {
-        let search = sessionStorage.getItem('hotel_search');
-        if (search) {
-            // this.setDestination();
-            this.getHotels();
-        } else {
-            this.$router.push('/hotel');
+            form: store.state.hotel.hotel_search, // 表单
         }
     },
+    computed: {
+        ...mapState('hotel', ['hotel_search']),
+    },
     methods: {
+        ...mapMutations('hotel', ['SET_SEARCH']),
         sort(type) {
             // 选择酒店列表排序方式
             this.sidx = type;
@@ -220,6 +253,7 @@ export default {
         search(data, n = 1) {
             // 要把附加条件合并,第二个参数再选择价格或者评价排序是默认第一页
             this.mapMarks = '&markers=size:tiny%color:red%7Clabel:P%7C';
+            this.SET_SEARCH(data);
             // 更新表单
             this.form = data;
             this.pageNo = n;
@@ -233,34 +267,24 @@ export default {
             };
             this.getHotelList(form);
         },
-        getHotels() {
-            // 从首页或者详情进入,直接拿sessionstorage初始化数据(子组件还未加载)
-            this.mapMarks = '&markers=size:tiny%color:red%7Clabel:P%7C';
-            let search = this.mixin_m_SStorage('get', 'hotel_search');
+        formatForm(data) {
+            // 按接口格式化参数
             let form = {};
-            Object.keys(search).map(v => {
+            Object.keys(data).map(v => {
                 if (v !== 'destination') {
-                    form[v] = search[v];
+                    form[v] = data[v];
                 }
                 if(v === 'childAge') {
-                    form[v] = search[v].join(',');
+                    form[v] = data[v].join(',');
                 }
             });
-            form['countryId'] = search.destination[0]*1;
-            form['cityId'] = search.destination[1]*1;
-            this.form = form;
-            form = {
-                ...form,
-                moreConditionSearchDTO: { ...this.extra },
-                pageNo: this.pageNo,
-                pageSize: this.pageSize,
-                order: this.order,
-                sidx: this.sidx,
-            }
-            this.getHotelList(form);
+            form['countryId'] = data.destination[0]*1;
+            form['cityId'] = data.destination[1]*1;
+            return form;
         },
         getHotelList(data) {
-            this.$axios.post(api_hotel.searchHotel, data, { custom: { token: true } }).then(res => {
+            data = this.formatForm(data)
+            this.$axios({...API_HOTEL.searchHotel, data}).then(res => {
                 let logined = this.mixin_m_SStorage('has', 'token');
                 if (res.success) {
                     this.hotelList = res.data.records.map(v => {

@@ -128,7 +128,7 @@ export default {
         cityName: Object, // 城市、国家名，面包屑使用
     },
     computed: {
-        ...mapState('hotel', [ 'search' ]),
+        ...mapState('hotel', [ 'hotel_search' ]),
         nightNum() {
             // 入住多少晚
             if(this.form.checkInDate && this.form.checkOutDate) {
@@ -139,13 +139,6 @@ export default {
         }
     },
     data() {
-        const validateDestination = (rule, value, callback) => {
-            if (value.length < 1) {
-                callback(new Error('请选择国家和城市'));
-            } else {
-                callback();
-            }
-        };
         return {
             visible: false, // 入住人员drowpdown
             allCitylist: [],
@@ -168,8 +161,11 @@ export default {
             },
         };
     },
-    mounted() {
-        this.initForm();
+    created() {
+        if (this.hotel_search) {
+            // 必须初始化数据避免过多表单验证
+            this.form = { ...this.form, ...this.hotel_search };
+        }
         this.getCountryList();
         this.getNationList();
     },
@@ -202,25 +198,7 @@ export default {
                 this.$Message.error({ content: '请选择入住日期', duration: 1.5 });
                 return;
             }
-            this.SET_SEARCH(this.form);
-            let form = this.formatForm();
-            this.$emit('search', form);
-        },
-        formatForm() {
-            // 按接口格式化参数
-            let form = {};
-            let _this = this;
-            Object.keys(this.form).map(v => {
-                if (v !== 'destination') {
-                    form[v] = _this.form[v];
-                }
-                if(v === 'childAge') {
-                    form[v] = _this.form[v].join(',');
-                }
-            });
-            form['countryId'] = this.form.destination[0]*1;
-            form['cityId'] = this.form.destination[1]*1;
-            return form;
+            this.$emit('search', this.form);
         },
         changeDate(arr) {
             // 修改入住离开日期
@@ -250,12 +228,12 @@ export default {
                 })
         },
         getNationList(){
-            this.$axios({...API_LOCATION.nationList, params: {id:333}})
+            this.$axios({...API_LOCATION.nationList})
                 .then(res=>{
                     if(res.success){
                         this.nationList = res.data;
-                        if(this.search && search.nationality) {
-                            this.form.nationality = search.nationality;
+                        if(this.hotel_search && this.hotel_search.nationality) {
+                            this.form.nationality = this.hotel_search.nationality;
                         }
                     }
                 })
@@ -287,18 +265,16 @@ export default {
                     let selectedCity = citys.find(v => v.value === this.form.destination[1]);
                     if(selectedCity) {
                         // 必须重设一次，不然不回显
-                        this.form.destination = [item.value, selectedCity.value]
+                        this.form.destination = [item.value, selectedCity.value];
+                        this.$emit('update:cityName',{
+                            nameCn: selectedCity.label,
+                            nameEn: selectedCity.nameEn
+                        })
                     }
                 }
                 item.loading = false;
                 callback();
             });
-        },
-        initForm() {
-            if (this.search) {
-                // 必须初始化数据避免过多表单验证
-                this.form = { ...this.search };
-            }
         },
         removeHotelId(){ // 避免从sessionStorage初始化后一直存在
             this.form.hotelId = '';

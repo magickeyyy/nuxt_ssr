@@ -78,9 +78,10 @@ module.exports = {
       ssr: true
     },
     {
-      src: '~plugins/view-design',
+      src: '~/plugins/view-design',
       ssr: true
     },
+    { src: '~/plugins/directive', ssr: false },
     '~/plugins/mixin',
     '~/plugins/axios',
   ],
@@ -109,7 +110,7 @@ module.exports = {
   },
   proxy: {
     '/client': {
-      target: process.env.NODE_ENV === 'production' ? 'http://39.98.245.40:9000' : 'http://192.168.8.13:19300', // 39.98.245.40:9000   //192.168.8.13:19300
+      target: process.env.NODE_ENV === 'production' ? 'http://39.98.245.40:9000' : 'http://39.98.245.40:9000', // 39.98.245.40:9000   //192.168.8.13:19300
       // target: 'http://39.98.245.40:9000', // 39.98.245.40:9000   //192.168.8.13:19300
       pathRewrite: {
         '^/client': '/',

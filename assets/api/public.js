@@ -34,6 +34,9 @@ export const API_LOCATION = {
         headers: {
             token: true,
         },
+        custom: {
+            token: true,
+        }, 
     },
     treeByCountry: {
         url: PREFIX + '/location/treeByCountry',

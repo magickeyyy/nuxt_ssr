@@ -104,7 +104,6 @@
                                 } else {
                                     let time = new Date();
                                     this.list = this.formatPrice(time.getFullYear(),time.getMonth()+1,[]);
-                                    debugger
                                     return Promise.resolve(false)
                                 }
                             })

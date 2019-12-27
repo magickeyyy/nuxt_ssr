@@ -191,20 +191,20 @@ export default {
         this.getNameList();
     },
     mounted() {
-        // const t = localStorage.getItem('token');
-        // const uid = localStorage.getItem('userID');
-        // const tt = localStorage.getItem('userIDTime');
-        // if (t !== undefined && uid !== '' && t !== '' && uid !== '' && tt !== undefined && tt !== '') {
-        //     if (tt - new Date().getTime() > 0) {
-        //         sessionStorage.setItem('token', t);
-        //         sessionStorage.setItem('userID', uid);
-        //         this.SET_LOGIN({ logined: true });
-        //     } else {
-        //         localStorage.removeItem('token');
-        //         localStorage.removeItem('userID');
-        //         localStorage.removeItem('userIDTime');
-        //     }
-        // }
+        const t = localStorage.getItem('token');
+        const uid = localStorage.getItem('userID');
+        const tt = localStorage.getItem('userIDTime');
+        if (t !== undefined && uid !== '' && t !== '' && uid !== '' && tt !== undefined && tt !== '') {
+            if (tt - new Date().getTime() > 0) {
+                sessionStorage.setItem('token', t);
+                sessionStorage.setItem('userID', uid);
+                this.SET_LOGIN({ logined: true, token: t, userInfo: {}});
+            } else {
+                localStorage.removeItem('token');
+                localStorage.removeItem('userID');
+                localStorage.removeItem('userIDTime');
+            }
+        }
     },
     methods: {
         ...mapMutations('login', ['SET_LOGIN']),
@@ -215,11 +215,9 @@ export default {
             this.visible2 = visible;
         },
         checkLogin() {
-            // if (sessionStorage.token) {
-            //     this.SET_LOGIN({ token: sessionStorage.token, logined: true });
-            // } else {
-            //     this.SET_LOGIN({ logined: false });
-            // }
+            if(!this.logined) {
+                this.SET_LOGIN({ logined: false, token: null, userInfo: {} })
+            }
         },
         handleClick(v, i) {
             switch (i) {
@@ -273,17 +271,19 @@ export default {
                             this.SET_LOGIN({ token: res.data.token, logined: true, userInfo: res.data.customer || {} });
                             this.$nuxt.$router.push('/');
                             this.$Message.success('登录成功!');
-                            // sessionStorage.setItem('token', res.data.token);
-                            // sessionStorage.setItem('userID', res.data.customer.id);
+                            sessionStorage.setItem('token', res.data.token);
+                            sessionStorage.setItem('userID', res.data.customer.id);
 
-                            // localStorage.setItem('token', res.data.token);
-                            // localStorage.setItem('userID', res.data.customer.id);
-                            // localStorage.setItem('userIDTime', new Date().getTime() + 8 * 60 * 60 * 1000);
+                            localStorage.setItem('token', res.data.token);
+                            localStorage.setItem('userID', res.data.customer.id);
+                            localStorage.setItem('userIDTime', new Date().getTime() + 8 * 60 * 60 * 1000);
 
                             this.saveUsername();
                             this.visible = false;
                         } else {
                             this.SET_LOGIN({ token: null, logined: false, userInfo: {} });
+                            sessionStorage.clear();
+                            localStorage.clear();
                         }
                     });
                 }

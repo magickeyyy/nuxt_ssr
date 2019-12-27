@@ -5,10 +5,11 @@
  * @Attention: 
  */
 function LStorage(method, key, value) {
+    if(!process.client) return;
     let local = window.localStorage;
     switch(method) {
         case 'get':
-            if(!local[key]) return; 
+            if(!local[key]) return;
             return JSON.parse(local[key]);
         case 'set':
             local.setItem(key,JSON.stringify(value));
@@ -25,6 +26,7 @@ function LStorage(method, key, value) {
 }
 
 function SStorage(method, key, value) {
+    if(!process.client) return;
     let local = window.sessionStorage;
     switch(method) {
         case 'get':
