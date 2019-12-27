@@ -530,7 +530,6 @@ export default {
                         .post(api_bus.busBooking, busBookingDTO, { custom: { token: true } })
                         .then(res => {
                             if (res.success) {
-                                console.log('tiaozhuan :', res);
                                 this.ASYNC_SET_DATA(res.data).then(res=>{
                                     this.$nuxt.$router.push({
                                         name: 'bus-preOrder',
@@ -542,7 +541,6 @@ export default {
                             }
                         })
                         .catch(error => {
-                            console.log(error);
                         });
                 } else {
                     this.$Message.error('请填写完整信息');

@@ -146,7 +146,6 @@ export default {
                         params: { cityId: this.city, pageNo: 1, pageSize: 10, resourceType: i.type },
                     })
                     .then(res => {
-                        console.log('resss :', res);
                     });
             }
             //从点击进入

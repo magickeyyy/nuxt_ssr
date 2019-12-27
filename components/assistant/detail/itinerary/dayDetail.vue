@@ -591,7 +591,6 @@ export default {
             if (name === 'trafficInCity') {
                 this.trafficInCityFlags = true;
                 this.dayLenght = this.getListLenght();
-                console.log('this.dayLenght :', this.dayLenght);
             }
         },
         HighlightsCancel() {

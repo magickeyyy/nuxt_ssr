@@ -61,7 +61,6 @@
                 if(this.trigger === 'custom') {
                     this.$emit('update:visible', this.currentVisible);
                 }
-                console.log(this.currentVisible)
             }
         }
     };

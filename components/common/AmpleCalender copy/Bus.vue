@@ -106,7 +106,6 @@ export default {
     watch: {
         during0: {
             handler: function(n, o) {
-                console.log(n, o);
             },
             deep: true,
         },

@@ -269,6 +269,8 @@ export default {
                     this.$axios.post(api_auth.login, this.form).then(res => {
                         if (res.success) {
                             this.SET_LOGIN({ token: res.data.token, logined: true, userInfo: res.data.customer || {} });
+                            this.$cookies.set('token', res.data.token);
+                            this.$cookies.set('logined', true);
                             this.$nuxt.$router.push('/');
                             this.$Message.success('登录成功!');
                             sessionStorage.setItem('token', res.data.token);

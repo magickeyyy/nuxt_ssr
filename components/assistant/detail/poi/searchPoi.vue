@@ -54,7 +54,6 @@ export default {
         },
         // 选择某个项
         checkData(data) {
-            console.log('data :', data);
             if (data) {
                 const [name, id] = data.split(',');
                 this.inputVal = name;

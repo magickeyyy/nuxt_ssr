@@ -165,7 +165,6 @@ export default {
                 const event = window.event || arguments.callee.caller.arguments[0];
                 event.stopPropagation();
             } catch (e) {
-                console.log('e :', e);
                 return false;
             }
             if (name === 'delday') {

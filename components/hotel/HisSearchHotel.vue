@@ -161,8 +161,8 @@ export default {
             },
         };
     },
-    created() {
-        if (this.hotel_search) {
+    mounted() {
+        if (this.hotel_search && JSON.stringify(this.hotel_search) !== '{}') {
             // 必须初始化数据避免过多表单验证
             this.form = { ...this.form, ...this.hotel_search };
         }

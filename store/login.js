@@ -23,4 +23,12 @@ export const mutations = {
 }
 
 export const actions = {
+	nuxtServerInit({ commit}, { req }) {
+		let cookie = req.headers.cookie;
+		commit('SET_LOGIN', {
+			token: cookie.token,
+			logined: true,
+			userInfo: {}
+		})
+	}
 }
