@@ -122,7 +122,6 @@
 
 <script>
 import HisSearchHotel from '~/components/hotel/HisSearchHotel';
-import { api_hotel } from '~/service/api';
 import { API_HOTEL } from '~/assets/api/hotel';
 import ExtraCondition from '~/components/hotel/ExtraCondition';
 import { mapState, mapMutations } from 'vuex';

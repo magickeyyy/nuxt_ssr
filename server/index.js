@@ -24,15 +24,40 @@ async function start () {
   } else {
     await nuxt.ready()
   }
+let result;
+function findobj(data) {
+  let arr;
+  let isArr = (data) instanceof Array
+  let isObj = (data) instanceof Object
+  if(!isObj && !isArr) return;
+  if(arr && arr.length === 0) return;
+  if(isArr) {
+    arr = data;
+  }
+  if(!isArr && isObj) {
+    arr = Object.keys(data).map( v => data[v])
+    console.log(arr.length)
+  }
+  for(let i = 0; i < arr.length; i++) {
+    if((arr[i]) instanceof Object && arr[i].msg && arr[i].msg === '操作成功') {
+      result = arr[i];
+      console.log(arr[i])
+      return;
+    } else {
+      findobj(arr[i])
+    }
+  }
+}
+
   app.use((ctx) => {
     ctx.status = 200
     ctx.respond = false // Bypass Koa's built-in response handling
     ctx.req.ctx = ctx // This might be useful later on, e.g. in nuxtServerInit or with nuxt-stash
     if(ctx.url === '/client/web/api/auth/login/username') {
-      
+      // findobj(ctx.res)
     }
     if(ctx.url === '/client/web/api/customer/logout') {
-      console.log(333,ctx.response.header)
+      console.log(333,ctx.res.body)
     }
     nuxt.render(ctx.req, ctx.res)
   })

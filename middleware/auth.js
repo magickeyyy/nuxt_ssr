@@ -6,7 +6,10 @@
  */
 import { Message } from 'view-design';
 export default ({ app: { router }, redirect, store, route }) => {
-    if (route.meta instanceof Array && route.meta.filter(v => v.login === 2).length > 0) {
+    if (!store.state.login.token && route.meta instanceof Array && route.meta.filter(v => v.login === 2).length > 0) {
+        Message.error('请登录');
+        return redirect(200, '/');
+    } else if(!store.state.login.token && route.meta instanceof Object && route.meta.login === 2) {
         Message.error('请登录');
         return redirect(200, '/');
     }

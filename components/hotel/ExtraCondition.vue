@@ -72,7 +72,7 @@
 </template>
 
 <script>
-    import {api_hotel} from '~/service/api';
+    import {API_HOTEL} from '~/assets/api/hotel';
     export default {
         name:'ExtraCondition',
         data() {
@@ -373,7 +373,7 @@
                 this.postData();
             },
             getFacilities(){ // 获取查询附加列表
-                this.$axios.get(api_hotel.facilities)
+                this.$axios({...API_HOTEL.facilities})
                     .then(res=>{
                         if(res.success) {
                             this.supportFacilitiesList = res.data.map(v=>{

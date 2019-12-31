@@ -59,6 +59,14 @@ const routeList = [
         },
     },
     {
+        name: 'hotel-search',
+        meta: {
+            login: 2,
+            redirect: '/hotel',
+            vuexModule: 'hotel',
+        },
+    },
+    {
         name: 'hotel-team',
         meta: {
             login: 2,
