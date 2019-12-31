@@ -31,12 +31,6 @@ export const API_LOCATION = {
     // 城市国家接口
     allCountry: {
         url: PREFIX + '/location/listAllCountry',
-        headers: {
-            token: true,
-        },
-        custom: {
-            token: true,
-        }, 
     },
     treeByCountry: {
         url: PREFIX + '/location/treeByCountry',
@@ -44,10 +38,6 @@ export const API_LOCATION = {
     // 获取全部国籍列表
     nationList: {
         url: PREFIX + '/location/listAllNationality',
-        headers: {
-            token: true,
-        },
-        token: true
     },
     // 欧洲分区及国家
     zone: {

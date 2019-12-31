@@ -1,16 +1,15 @@
-export const api_customer = {
-    // 账户接口
-    logout:'/customer/logout',
-    changePassword:'/customer/changePassword',
-};
+import PREFIX from './prefix'
 
-export const api_auth = {
+export const API_AUTH = {
     // 用户认证接口
     register:'/auth/register',
     getSms:'/auth/sms/register',
     checkSms:'/auth/sms/register/check',
     buyer:'/auth/register/buyer',
-    login:'/auth/login/username',
+    login: {
+        url: PREFIX + '/auth/login/username',
+        method: 'post'
+    },
     // 忘记密码发送邮箱验证码
     getEmailYzm:'/auth/email/forgetPassword',
     // 忘记密码发送邮箱
@@ -22,4 +21,11 @@ export const api_auth = {
     // 退出
     userExist:'/auth/userExist',
     signUpStepInfo:'/auth/signUpStepInfo',
+    logout: {
+        url: PREFIX + '/customer/logout',
+        headers: {
+            token: true,
+        }
+    },
+    changePassword:'/customer/changePassword',
 };

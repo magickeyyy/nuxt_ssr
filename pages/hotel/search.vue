@@ -87,7 +87,7 @@
                             </div>
                         </div>
                         <div class="absolute">
-                            <div class="right" v-if="v.logined">
+                            <div class="right" v-if="logined">
                                 <div>
                                     <span class="booking">Booking</span>&nbsp;
                                     <span class="score">{{v.ratings}}</span>
@@ -99,7 +99,7 @@
                                     <p>起</p>
                                 </div>
                             </div>
-                            <div class="right" v-if="!v.logined">
+                            <div class="right" v-if="!logined">
                                 <div class="bth">请登录以查看价格</div>
                             </div>
                         </div>
@@ -127,20 +127,17 @@ import { API_HOTEL } from '~/assets/api/hotel';
 import ExtraCondition from '~/components/hotel/ExtraCondition';
 import { mapState, mapMutations } from 'vuex';
 export default {
-    validate({ store }) {
-        if(!store.state.hotel.hotel_search || !store.state.hotel.hotel_search.bookingQuantity) return false;
-        return true;
-    },
     components: {
         HisSearchHotel,
         ExtraCondition,
     },
-    async asyncData({isStatic, isDev, redirect, store, $axios}) {
+    async asyncData({isStatic, isDev, redirect, store, $axios, app}) {
         let hotelList = [];
         let pageNo = 1;
         let pageSize = 10;
         let total = 0;
         let form = {};
+        let mapMarks = '&markers=size:tiny%color:red%7Clabel:P%7C';
         Object.keys(store.state.hotel.hotel_search).map(v => {
             if (v !== 'destination') {
                 form[v] = store.state.hotel.hotel_search[v];
@@ -164,8 +161,8 @@ export default {
                                 ? v.supportFacilities.split(',').slice(0, 2)
                                 : [];
                         v.ratings = (v.ratings / 10).toFixed(1);
-                        v['logined'] = store.state.hotel.logined;
                         v.star = Number(v.star);
+                        mapMarks = mapMarks + v.latitude + ',' + v.longitude + '|';
                         return v;
                     });
                 }
@@ -183,14 +180,24 @@ export default {
             selected: ['', '', ''],
             sel: null,
             priceOrder: true, // 价格高低排序标志
-            mapMarks: '&markers=size:tiny%color:red%7Clabel:P%7C',
             cityName: {}, // 搜索地城市，面包屑、地图中心
             extra: {}, // 左侧额外搜索条件
             form: store.state.hotel.hotel_search, // 表单
+            mapMarks,
         }
     },
     computed: {
         ...mapState('hotel', ['hotel_search']),
+        ...mapState('login', ['logined']),
+    },
+    mounted() {
+        // 为了可刷新
+        if(JSON.stringify(this.form) === '{}' && this.mixin_m_SStorage('has', 'hotel_search') && this.hotelList.length === 0 ) {
+            let hotel_search = this.mixin_m_SStorage('get', 'hotel_search');
+            this.form = hotel_search;
+            this.getHotelList(hotel_search);
+            this.SET_SEARCH(hotel_search);
+        }
     },
     methods: {
         ...mapMutations('hotel', ['SET_SEARCH']),
@@ -285,7 +292,6 @@ export default {
         getHotelList(data) {
             data = this.formatForm(data)
             this.$axios({...API_HOTEL.searchHotel, data}).then(res => {
-                let logined = this.mixin_m_SStorage('has', 'token');
                 if (res.success) {
                     this.hotelList = res.data.records.map(v => {
                         v['supportFacilities'] =
@@ -293,7 +299,6 @@ export default {
                                 ? v.supportFacilities.split(',').slice(0, 2)
                                 : [];
                         v.ratings = (v.ratings / 10).toFixed(1);
-                        v['logined'] = logined;
                         v.star = Number(v.star);
                         this.mapMarks = this.mapMarks + v.latitude + ',' + v.longitude + '|';
                         return v;

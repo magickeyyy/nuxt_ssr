@@ -106,13 +106,13 @@ module.exports = {
   },
   axios: {
     proxy: true,
-    // prefix: '/api/web/api', // web/api是WEB接口公共部分
+    proxyHeaders: false,
+    prefix: '/client',
     // credentials: true, // 是否创建axios实例，true可在ssr模式在请求头添加authentication
   },
   proxy: {
     '/client': {
       target: process.env.NODE_ENV === 'production' ? 'http://39.98.245.40:9000' : 'http://39.98.245.40:9000', // 39.98.245.40:9000   //192.168.8.13:19300
-      // target: 'http://39.98.245.40:9000', // 39.98.245.40:9000   //192.168.8.13:19300
       pathRewrite: {
         '^/client': '/',
         changeOrigin: true,

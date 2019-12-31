@@ -23,8 +23,10 @@ function checkResp(blob, name) {
 export default function ({ $axios, app: { router, store }, route, redirect, next }, inject) {
     $axios.onRequest(config => {
         // 处理IE每次请求参数相同就取缓存的问题
-        config.headers['Cache-Control'] = 'no-cache';
-        config.headers['Pragma'] = 'no-cache';
+        if(process.client && navigator.userAgent.indexOf('Trident') !== -1) {
+            // config.headers['Cache-Control'] = 'no-cache';
+            config.headers['Pragma'] = 'no-cache';
+        }
         if(config.headers.token) {
             if(store.state.login.logined && store.state.login.token) {
               config.headers['Authorization'] = store.state.login.token;

@@ -35,7 +35,6 @@ export default {
     },
     created() {
         this.getHistory();
-        // this.getSearchLogs();
     },
     computed: {
         ...mapState('login', [ 'logined' ]),
@@ -57,7 +56,7 @@ export default {
         searchHotel(form) {
             this.SET_SEARCH(form);
             this.mixin_m_SStorage('set', 'hotel_search', form);
-            this.$nuxt.$router.push({ name: 'hotel-search' });
+            this.$router.push({ name: 'hotel-search' });
         },
         getHistory() {
              const arr = this.history;

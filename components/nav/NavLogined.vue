@@ -114,6 +114,7 @@
 
 <script>
 import { api_auth, api_customer } from '@/service/api';
+import { API_AUTH } from '~/assets/api/auth'
 import { RESOURCE_TYPE_TO_SERVER } from '@/assets/js/play';
 import { mapMutations, mapState } from 'vuex';
 import REG from '~/assets/js/pattern';
@@ -191,19 +192,9 @@ export default {
         this.getNameList();
     },
     mounted() {
-        const t = localStorage.getItem('token');
-        const uid = localStorage.getItem('userID');
-        const tt = localStorage.getItem('userIDTime');
-        if (t !== undefined && uid !== '' && t !== '' && uid !== '' && tt !== undefined && tt !== '') {
-            if (tt - new Date().getTime() > 0) {
-                sessionStorage.setItem('token', t);
-                sessionStorage.setItem('userID', uid);
-                this.SET_LOGIN({ logined: true, token: t, userInfo: {}});
-            } else {
-                localStorage.removeItem('token');
-                localStorage.removeItem('userID');
-                localStorage.removeItem('userIDTime');
-            }
+        let token = sessionStorage.getItem('token');
+        if(token) {
+            this.SET_LOGIN({ logined: true, token, userInfo: {}});
         }
     },
     methods: {
@@ -266,7 +257,7 @@ export default {
         handleSubmit() {
             this.$refs.form.validate(valid => {
                 if (valid) {
-                    this.$axios.post(api_auth.login, this.form).then(res => {
+                    this.$axios({...API_AUTH.login, data: this.form}).then(res => {
                         if (res.success) {
                             this.SET_LOGIN({ token: res.data.token, logined: true, userInfo: res.data.customer || {} });
                             this.$cookies.set('token', res.data.token);
@@ -275,10 +266,6 @@ export default {
                             this.$Message.success('登录成功!');
                             sessionStorage.setItem('token', res.data.token);
                             sessionStorage.setItem('userID', res.data.customer.id);
-
-                            localStorage.setItem('token', res.data.token);
-                            localStorage.setItem('userID', res.data.customer.id);
-                            localStorage.setItem('userIDTime', new Date().getTime() + 8 * 60 * 60 * 1000);
 
                             this.saveUsername();
                             this.visible = false;
@@ -292,15 +279,10 @@ export default {
             });
         },
         logout() {
-            this.$axios.get(api_customer.logout, { custom: { token: true } }).then(res => {
+            this.$axios({ ...API_AUTH.logout }).then(res => {
                 this.SET_LOGIN({ token: null, logined: false, userInfo: {} });
-                // sessionStorage.removeItem('token');
-                // sessionStorage.removeItem('userID');
-
-                // localStorage.removeItem('token');
-                // localStorage.removeItem('userID');
-                // localStorage.removeItem('userIDTime');
-
+                sessionStorage.removeItem('token');
+                sessionStorage.removeItem('userID');
                 this.$nuxt.$router.push('/');
             });
         },

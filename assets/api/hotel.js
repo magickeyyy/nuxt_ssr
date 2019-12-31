@@ -5,15 +5,17 @@ export const API_HOTEL = {
     searchHotel: {
         url: PREFIX + '/hotel/hotels',
         method: 'post',
-        headers: {
-            token: true
-        }
     },
     hotelDetail: {
         url: PREFIX + '/hotel/hotelDetail',
+        method: 'post',
     },
     roomRateList: {
         url: PREFIX + '/hotel/roomRateList',
+        method: 'post',
+        headers: {
+            token: true
+        }
     },
     searchLogs: {
         url: PREFIX + '/hotel/searchLogs',
@@ -21,6 +23,10 @@ export const API_HOTEL = {
     // 跳转酒店预定,
     bookingPre: {
         url: PREFIX + '/hotel-booking/generic',
+        method: 'post',
+        headers: {
+            token: true
+        }
     },
     facilities: {
         url: PREFIX + '/hotel/facilities',

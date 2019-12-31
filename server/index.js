@@ -32,7 +32,7 @@ async function start () {
       
     }
     if(ctx.url === '/client/web/api/customer/logout') {
-      console.log(333,ctx.response)
+      console.log(333,ctx.response.header)
     }
     nuxt.render(ctx.req, ctx.res)
   })
