@@ -28,6 +28,10 @@ export default {
     components: {
         HisSearchHotel,
     },
+    validate(ctx) {
+        console.log('validate',process.server,process.client)
+        return true
+    },
     data() {
         return {
             hotelHistory: [],
@@ -35,6 +39,7 @@ export default {
     },
     created() {
         this.getHistory();
+        console.log('page',process.server, process.client)
     },
     computed: {
         ...mapState('login', [ 'logined' ]),
