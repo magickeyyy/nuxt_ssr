@@ -191,12 +191,6 @@ export default {
         this.checkLogin();
         this.getNameList();
     },
-    mounted() {
-        let token = sessionStorage.getItem('token');
-        if(token) {
-            this.SET_LOGIN({ logined: true, token, userInfo: {}});
-        }
-    },
     methods: {
         ...mapMutations('login', ['SET_LOGIN']),
         checkName(v) {
@@ -262,7 +256,7 @@ export default {
                             this.SET_LOGIN({ token: res.data.token, logined: true, userInfo: res.data.customer || {} });
                             this.$cookies.set('token', res.data.token);
                             this.$cookies.set('logined', true);
-                            this.$nuxt.$router.push('/');
+                            this.$router.push('/');
                             this.$Message.success('登录成功!');
                             sessionStorage.setItem('token', res.data.token);
                             sessionStorage.setItem('userID', res.data.customer.id);
@@ -600,32 +594,4 @@ export default {
         }
     }
 }
-// banner
-// .banner {
-//     height: 850px;
-//     background-color: #0e2839;
-//     background-image: url('~@/assets/banner/banner1.png');
-//     color: #f2f2f2;
-//     text-align: center;
-//     .back;
-//     h1 {
-//         font-size: 48px;
-//         line-height: 72px;
-//         padding: 323px 0 26px;
-//     }
-//     h3 {
-//         font-size: 30px;
-//         line-height: 36px;
-//         font-weight: 200;
-//     }
-// }
-// .en {
-//     .nav {
-//         section {
-//             > div {
-//                 background-image: url('~@/assets/public_img/sign_en.png');
-//             }
-//         }
-//     }
-// }
 </style>
