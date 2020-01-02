@@ -22,7 +22,6 @@
 <script>
 import HisSearchHotel from '~/components/hotel/HisSearchHotel';
 import { mapState, mapMutations } from 'vuex';
-import { api_hotel } from '~/service/api';
 export default {
     layout: 'fixedNav',
     components: {
@@ -81,16 +80,6 @@ export default {
             data.checkOutDate = this.mixin_m_formatDate(mt);
             this.SET_SEARCH(data);
             this.$nuxt.$router.push({ name: 'hotel-search' });
-        },
-        getSearchLogs() {
-            // 搜索历史，接口待优化
-            let token = sessionStorage.token;
-            if (!token) return;
-            this.$axios.post(api_hotel.searchLogs, {}, { custom: { token: true, encode: 'urlencoded' } }).then(res => {
-                if (res.success && res.data.length > 0) {
-                    this.hotelHistory = res.data;
-                }
-            });
         },
     },
 };

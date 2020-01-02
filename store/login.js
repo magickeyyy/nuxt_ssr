@@ -21,14 +21,3 @@ export const mutations = {
 		state.nameList = list;	
 	}
 }
-
-export const actions = {
-	nuxtServerInit({ commit}, { req }) {
-		let cookie = req.headers.cookie;
-		commit('SET_LOGIN', {
-			token: cookie.token,
-			logined: true,
-			userInfo: {}
-		})
-	}
-}
