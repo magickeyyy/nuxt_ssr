@@ -188,7 +188,6 @@ export default {
         },
     },
     created() {
-        this.checkLogin();
         this.getNameList();
     },
     methods: {
@@ -198,11 +197,6 @@ export default {
         },
         changeSvg(visible) {
             this.visible2 = visible;
-        },
-        checkLogin() {
-            if(!this.logined) {
-                this.SET_LOGIN({ logined: false, token: null, userInfo: {} })
-            }
         },
         handleClick(v, i) {
             switch (i) {
@@ -274,10 +268,10 @@ export default {
         },
         logout() {
             this.$axios({ ...API_AUTH.logout }).then(res => {
-                this.SET_LOGIN({ token: null, logined: false, userInfo: {} });
-                sessionStorage.removeItem('token');
-                sessionStorage.removeItem('userID');
-                this.$nuxt.$router.push('/');
+                this.$cookies.removeAll();
+                this.SET_LOGIN({ token: undefined, logined: false, userInfo: {} });
+                sessionStorage.clear();
+                this.$router.push('/');
             });
         },
         extralClick(item, index) {

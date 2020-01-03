@@ -1,3 +1,4 @@
+import parse_cookie from '~/assets/util/parse_cookie'
 export const state = () => ({
 	locales: ['en', 'zh'],
 	locale: 'zh',
@@ -31,8 +32,11 @@ export const actions = {
 	ASYNC_SET_NAVSTYLE({commit}, str) {
 		commit('SET_NAVSTYLE', str)
 	},
-	async nuxtServerInit({ commit}, {app: { router }, store, req, res, query, params, route}) {
-		let cookie = req.headers.cookie;
-		await commit('SET_SS', req.headers.cookie)
+	async nuxtServerInit({ commit, dispatch }, {app: { router, $axios }, store, req, res, query, params, route}) {
+		let token = parse_cookie(req.headers.cookie).token;
+		await commit('login/SET_LOGIN', {
+			token,
+			logined: token?true:false
+		})
 	}
 }

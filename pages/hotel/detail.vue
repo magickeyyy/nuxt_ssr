@@ -411,7 +411,6 @@ export default {
     },
     methods: {
         ...mapMutations('hotel', ['SET_ORDERPRE', 'SET_SEARCH']),
-        ...mapMutations('login', ['SET_LOGIN']),
         bookingTeam(item, supplierId) {
             // 游海团组酒店预定
             let hotelId = this.$route.query.hotelId * 1

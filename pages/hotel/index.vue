@@ -28,7 +28,6 @@ export default {
         HisSearchHotel,
     },
     validate(ctx) {
-        console.log('validate',process.server,process.client)
         return true
     },
     data() {
@@ -38,7 +37,6 @@ export default {
     },
     created() {
         this.getHistory();
-        console.log('page',process.server, process.client)
     },
     computed: {
         ...mapState('login', [ 'logined' ]),

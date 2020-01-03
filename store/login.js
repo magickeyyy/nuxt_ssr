@@ -5,19 +5,24 @@
  * @Attention: 
  */
 export const state = () => ({
-    token:null,
-	userInfo:{},
+    token: undefined,
+	userInfo: {},
 	logined: false,
 	nameList: []
 })
 
 export const mutations = {
-	SET_LOGIN(state, { token, logined, userInfo }) {
+	SET_LOGIN(state, { token, logined = false, userInfo = {} }) {
 		state.token = token;
 		state.logined = logined;
 		state.userInfo = userInfo;
 	},
 	SET_NAMELIST(state, list) {
 		state.nameList = list;	
+	}
+}
+export const actions = {
+	ASYNC_SET_LOGIN({ commit }, { token, logined = false, userInfo = {} }) {
+		commit('SET_LOGIN', { token, logined, userInfo })
 	}
 }

@@ -14,15 +14,6 @@ export default {
         Footer,
         NavLogined,
     },
-    mounted() {
-        let token = sessionStorage.getItem('token');
-        if(token) {
-            this.SET_LOGIN({ logined: true, token, userInfo: {}});
-        }
-    },
-    methods: {
-        ...mapMutations('login', ['SET_LOGIN']),
-    }
 };
 </script>
 

@@ -15,20 +15,11 @@ export default {
         Footer,
         NavLogined,
     },
-    beforeCreate() {
-        console.log('before-layout',process.server, process.client)
-    },
-    created() {
-        console.log('ed-layout',process.server, process.client)
-    },   
     mounted() {
-        let token = sessionStorage.getItem('token');
-        if(token) {
-            this.SET_LOGIN({ logined: true, token, userInfo: {}});
-        }
+        this.SET_SS(12)
     },
     methods: {
-        ...mapMutations('login', ['SET_LOGIN']),
+        ...mapMutations(['SET_SS']),
     }
 };
 </script>
