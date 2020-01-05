@@ -85,7 +85,7 @@
 </template>
 
 <script>
-import { api_play } from '~/service/api';
+import { API_PLAY } from '~/assets/api/play';
 export default {
     data() {
         return {
@@ -127,7 +127,7 @@ export default {
                 pageNo: this.pageNo,
                 pageSize: this.pageSize,
             };
-            this.$axios.post(api_play.commentList, params).then(res => {
+            this.$axios({ ...API_PLAY.commentList, data:params }).then(res => {
                 if (res.success) {
                     if (this.resourceType == 'RESTAURANT') {
                         this.records = res.data.records.map(v => {

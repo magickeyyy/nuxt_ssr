@@ -93,7 +93,6 @@
 
 <script>
 import { mapState, mapActions } from 'vuex';
-import { api_play } from '~/service/api';
 import { TagType, ResTypeToServer } from '@/assets/js/play';
 
 export default {

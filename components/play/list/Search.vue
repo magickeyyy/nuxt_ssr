@@ -28,7 +28,7 @@
 
 <script>
 import { RESOURCE_TYPE_TO_SERVER, TagType, ResTypeToServer } from '@/assets/js/play';
-import { api_play } from '~/service/api';
+import { API_PLAY } from '~/assets/api/play';
 export default {
     props: {
         search: {
@@ -93,7 +93,7 @@ export default {
             },)
         },
         getData(params) {
-            return this.$axios.get(api_play.listForType, { params }).then(res => {
+            return this.$axios({...API_PLAY.listForType, params }).then(res => {
                 if (res.success) {
                     this.list = this.formatList(res.data);
                 } else {

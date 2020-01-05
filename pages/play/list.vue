@@ -54,7 +54,7 @@
 <script>
 import Query from '~/components/play/list/Query';
 import Sort from '~/components/play/list/Sort';
-import { api_play } from '~/service/api';
+import { API_PLAY } from '~/assets/api/play';
 import GoodsPanle from '~/components/play/list/GoodsPanle';
 import Cities from '~/components/play/list/Cities';
 import Search from '~/components/play/list/Search';
@@ -150,7 +150,7 @@ export default {
         },
         // 获取搜索附加条件
         getTags(resourceType) {
-            this.$axios.get(api_play.tags, { params: { resourceType } }).then(res => {
+            this.$axios({ ...API_PLAY.tags, params: { resourceType } }).then(res => {
                 if (res.success) {
                     this.tagList = res.data.map(item => {
                         // defaultOption是APP用的
@@ -196,7 +196,7 @@ export default {
             });
             // 如果不是当前种类资源，还要重置条件中的附加条件
             if(this.form.resourceType !== data.resourceType) obj.selectedLabels = [];
-            this.$axios.post(api_play.searchAll, obj, { custom: { token: true } })
+            this.$axios({ ...API_PLAY.searchAll, data: obj, headers: { token: true } })
                 .then(res => {
                     let n = this.resourceTypes.findIndex(v => v.value === data.resourceType)
                     if (res.success) {

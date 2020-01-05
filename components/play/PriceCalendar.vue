@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import { api_play } from '~/service/api';
+import { API_PLAY } from '~/assets/api/play';
 export default {
     props: {
         params: {
@@ -125,11 +125,11 @@ export default {
         },
         getLinkage(data) {
             // 默认餐厅
-            let url = api_play.linkage;
+            let url = API_PLAY.linkage;
             if (this.type !== '1') {
-                url = api_play.otherLinkage;
+                url = API_PLAY.otherLinkage;
             }
-            return this.$axios.post(url, data, { custom: { token: true } })
+            return this.$axios({ ...url, data })
                         .then(res => {
                             let arr = [];
                             if(res.success && res.data.days && res.data.days.length > 0) arr = res.data.days;

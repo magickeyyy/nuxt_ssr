@@ -8,7 +8,6 @@
 <script>
 import Footer from '@/components/footer/Footer';
 import NavLogined from '@/components/nav/NavLogined';
-import { mapMutations } from 'vuex'
 export default {
     components: {
         Footer,

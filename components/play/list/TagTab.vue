@@ -15,7 +15,6 @@
 <script>
 import Query from './Query';
 import { mapState, mapMutations } from 'vuex'
-import { api_play } from '~/service/api'
 
 export default {
     name: 'TagTab',

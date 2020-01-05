@@ -37,7 +37,24 @@ const routeList = [
         },
     },
     {
-        name: 'play-order',
+        name: 'play-resOrder',
+        alias: '/play/order',
+        meta: {
+            login: 2,
+            redirect: '/play',
+        },
+    },
+    {
+        name: 'play-ticketOrder',
+        alias: '/play/order',
+        meta: {
+            login: 2,
+            redirect: '/play',
+        },
+    },
+    {
+        name: 'play-expOrder',
+        alias: '/play/order',
         meta: {
             login: 2,
             redirect: '/play',

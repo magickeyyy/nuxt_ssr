@@ -50,10 +50,11 @@
 
 <script>
 // import Position_C from '@/components/play/index/positionChooes';
-import ChooseCountry from '@/components/play/index/ChooseCountry';
+import ChooseCountry from '~/components/play/index/ChooseCountry';
 import RES from '@/components/play/index/resShow';
 import BigSearch from '@/components/play/index/BigSearch';
-import { api_play, api_base } from '@/service/api';
+import { API_PLAY } from '@/assets/api/play';
+import { API_BASE } from '@/assets/api/public';
 import { RESOURCE_TYPE_TO_SERVER } from '@/assets/js/play'
 
 export default {
@@ -84,7 +85,7 @@ export default {
             let type = this.option;
             if (this.group === 1) {
                 // 获取最近浏览（包含三种类型）
-                this.$axios.get(api_play.listBrowseLog, { custom: { token: true } }).then(res => {
+                this.$axios({ ...API_PLAY.listBrowseLog, headers: { token: true } }).then(res => {
                     if (res.success) {
                         res.data = res.data?res.data:[];
                         this.listDatas = res.data.filter(v => v.browseResource.resourceType === type)
@@ -95,7 +96,7 @@ export default {
             } else {
                 // 获取经常预订（单独类型）
                 this.$axios
-                    .get(api_play.resourceReserve, { params: { limit: 8, type, state: 'ENABLE' }, custom: { token: true } })
+                    .get(API_PLAY.resourceReserve, { params: { limit: 8, type, state: 'ENABLE' }, custom: { token: true } })
                     .then(res => {
                         if (res.success) {
                             this.listDatas2 = res.data?res.data:[];

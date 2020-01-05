@@ -168,7 +168,8 @@
 </template>
 
 <script>
-import { api_play } from '~/service/api';
+import { RESOURCE_TYPE_TO_SERVER } from '~/assets/js/play'
+import { API_PLAY } from '~/assets/api/play';
 import { ResMealType } from '~/assets/js/play';
 export default {
     name: 'ResMiddle',
@@ -278,7 +279,7 @@ export default {
                     return v;
                 });
             }
-            this.$axios.post(api_play.restaurant, data, { custom: { token: true } }).then(res => {
+            this.$axios({...API_PLAY.restaurant, data }).then(res => {
                 if (res.success) {
                     let play_orderInfo = {};
                     if (reserveType === 'TEAM_MEAL') {
@@ -320,7 +321,7 @@ export default {
                         };
                     }
                     sessionStorage.setItem('play_orderInfo', JSON.stringify(play_orderInfo));
-                    this.$nuxt.$router.push('/play/order');
+                    his.$router.push({ name: 'play-resOrder', query: { type: RESOURCE_TYPE_TO_SERVER[0].value}});
                 }
             });
         },

@@ -87,7 +87,8 @@
 </template>
 
 <script>
-import { api_play } from '~/service/api';
+import { RESOURCE_TYPE_TO_SERVER } from '~/assets/js/play'
+import { API_PLAY } from '~/assets/api/play';
 export default {
     name: 'TicketMiddle',
     props: {
@@ -147,7 +148,7 @@ export default {
                 resourceId: this.detail.id * 1,
                 skuId: v.id * 1,
             };
-            this.$axios.post(api_play.resource, data, { custom: { token: true } }).then(res => {
+            this.$axios({...API_PLAY.resource, data }).then(res => {
                 if (res.success) {
                     this.mixin_m_SStorage('set', 'play_orderInfo', {
                         pre: res.data,
@@ -172,7 +173,7 @@ export default {
                         },
                         resourceType: 'TICKETS',
                     });
-                    this.$router.push({ name: 'play-order' });
+                    his.$router.push({ name: 'play-ticketOrder', query: { type: RESOURCE_TYPE_TO_SERVER[1].value}});
                 }
             });
         },

@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import {api_base} from '~/service/api'
+import {API_BASE} from '~/assets/api/public'
 export default {
     props: {
         getData: {
@@ -74,7 +74,7 @@ export default {
             return arr;
         },
         getDataList(params) { // 获取搜索结果
-            return this.$axios.get(api_base.complexSearch,{ params })
+            return this.$axios({ ...API_BASE.complexSearch, params })
                     .then(res=>{
                         if(res.success){
                             this.searchList = this.formatList(res.data);

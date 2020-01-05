@@ -14,16 +14,14 @@ export const API_BASE = {
     // 玩乐等复合型搜索：地区、门票、餐厅灯
     complexSearch:{
         url: PREFIX + '/search/destination/listForType',
-        method: 'get',
     },
     //获取城市列表（带区域，东欧、西欧）
     listAllCountryWithContinentPartition:{
-        url: '/location/listAllCountryWithContinentPartition',
+        url: PREFIX + '/location/listAllCountryWithContinentPartition',
     },
     //word上传
     wordLoad:{
-        url: '/base/doc/upload',
-        method: 'get',
+        url: PREFIX + '/base/doc/upload',
     },
 };
 

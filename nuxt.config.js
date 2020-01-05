@@ -102,7 +102,7 @@ module.exports = {
     '@nuxtjs/style-resources'
   ],
   styleResources: {
-    less: './assets/style/variable.less'
+    less: '~/assets/style/variable.less'
   },
   axios: {
     proxy: true,

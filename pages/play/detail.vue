@@ -45,7 +45,7 @@
 
 <script>
 import Comment from '~/components/play/Comment';
-import { api_play } from '~/service/api';
+import { API_PLAY } from '~/assets/api/play';
 import { resType } from '~/assets/js/dictionary';
 import Top from '~/components/play/detail/Top';
 import TicketMiddle from '~/components/play/detail/TicketMiddle';
@@ -146,9 +146,9 @@ export default {
             this.getDetail();
         },
         getDetail() {
-            let url = this.$route.query.type === 'RESTAURANT' ? api_play.resDetail : api_play.otherDetail;
+            let url = this.$route.query.type === 'RESTAURANT' ? API_PLAY.resDetail : API_PLAY.otherDetail;
             let resourceId = this.detailInfo.resourceId * 1;
-            this.$axios.get(url, { params: { resourceId }, custom: { token: true } }).then(res => {
+            this.$axios({ ...url, params: { resourceId }, headers: { token: true } }).then(res => {
                 if (res.success) {
                     if (res.data.description && res.data.description.length > 0) {
                         res.data.description = res.data.description.split(/[↵\f\n\r]/).filter(v => v);
@@ -166,19 +166,12 @@ export default {
                         res.data.transportationGuide = [];
                     }
                     this.detail = res.data;
-                    window.setRes({
-                        name1: res.data.name,
-                        name2: resType[res.data.type],
-                        sp: res.data.address,
-                        img: '',
-                        // img: res.data.images[0],
-                    });
                 }
             });
         },
         getRate() {
             let resourceId = this.detailInfo.resourceId;
-            this.$axios.get(api_play.rate, { params: { resourceId } }).then(res => {
+            this.$axios({ ...API_PLAY.rate, params: { resourceId } }).then(res => {
                 if (res.success) {
                     this.rate = {};
                     Object.keys(res.data).map(v => {

@@ -24,7 +24,7 @@
 </template>
 
 <script>
-import { api_base } from '@/service/api';
+import { API_BASE } from '@/assets/api/public';
 import { RESOURCE_TYPE_TO_SERVER } from '@/assets/js/play';
 export default {
     data() {
@@ -37,7 +37,7 @@ export default {
     },
     methods: {
         getCities() {
-            this.$axios.get(api_base.listAllCountryWithContinentPartition, { custom: { token: false } }).then(res => {
+            this.$axios({ ...API_BASE.listAllCountryWithContinentPartition }).then(res => {
                 if (res.success) {
                     this.cities = res.data.trees;
                 }

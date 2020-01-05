@@ -18,7 +18,7 @@
 </template>
 
 <script>
-    import {api_base} from '~/service/api'
+    import { API_BASE } from '~/assets/api/public'
     export default {
         name:'PhoneAndPrexfix', // 待手机号前缀，表单验证
         data() {
@@ -36,7 +36,7 @@
         },
         methods:{
             getPrex(){
-                this.$axios.get(api_base.phonePrex)
+                this.$axios({...API_BASE.phonePrex})
                     .then(res=>{
                         if(res.success){
                             this.prexList=res.data;

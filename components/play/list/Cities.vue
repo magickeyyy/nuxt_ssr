@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import { api_location } from '~/service/api';
+import { API_LOCATION } from '~/assets/api/public';
 import { mapState, mapMutations } from 'vuex';
 // 6056,6603
 export default {
@@ -139,7 +139,7 @@ export default {
         getCountries() {
             // 获取国家列表，并从结果中筛选选中的国家、城市没有就激活全部
             this.activeCounId = this.search.countryId;
-            this.$axios.get(api_location.zone).then(res => {
+            this.$axios({ ...API_LOCATION.zone }).then(res => {
                 if (res.success) {
                     let list = res.data.trees;
                     this.zoneList = list;
@@ -165,7 +165,7 @@ export default {
             });
         },
         getCities(countryId) {
-            this.$axios.get(api_location.treeByCountry, { params: { countryId } }).then(res => {
+            this.$axios({ ...API_LOCATION.treeByCountry, params: { countryId } }).then(res => {
                 if (res.success) {
                     this.cityList = res.data.trees;
                 }
