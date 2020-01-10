@@ -38,7 +38,6 @@ const routeList = [
     },
     {
         name: 'play-resOrder',
-        alias: '/play/order',
         meta: {
             login: 2,
             redirect: '/play',
@@ -46,7 +45,6 @@ const routeList = [
     },
     {
         name: 'play-ticketOrder',
-        alias: '/play/order',
         meta: {
             login: 2,
             redirect: '/play',
@@ -54,7 +52,6 @@ const routeList = [
     },
     {
         name: 'play-expOrder',
-        alias: '/play/order',
         meta: {
             login: 2,
             redirect: '/play',

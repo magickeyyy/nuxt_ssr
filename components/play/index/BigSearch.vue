@@ -78,9 +78,9 @@ export default {
                     .then(res=>{
                         if(res.success){
                             this.searchList = this.formatList(res.data);
-                            return Promise.resolve(this.searchList.length>0?true:false);
+                            return this.searchList.length>0?true:false;
                         } else {
-                            return Promise.resolve(false)
+                            return false;
                         }
                     })
         },

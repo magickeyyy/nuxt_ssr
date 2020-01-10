@@ -59,6 +59,17 @@ import GoodsPanle from '~/components/play/list/GoodsPanle';
 import Cities from '~/components/play/list/Cities';
 import Search from '~/components/play/list/Search';
 import { RESOURCE_TYPE_TO_SERVER } from '@/assets/js/play';
+import { mapState, mapMutations } from 'vuex'
+import Axios from 'axios';
+
+// 获取标签列表
+function getTags($axios, resourceType) {
+    return $axios({ ...API_PLAY.tags, params: { resourceType } })
+}
+// 根据已选条件获取对应资源及其总数
+function sourceList($axios, data) {
+    return $axios({ ...API_PLAY.searchAll, data, headers: { token: true } })
+}
 
 export default {
     components: {
@@ -68,41 +79,96 @@ export default {
         Sort,
         Search,
     },
-    data() {
-        return {
-            queryData: '',
-            datas: [], // 获取的数据,
-            form: {
+    asyncData({isStatic, isDev, redirect, store, $axios, app}) {
+        const resourceType = 'RESTAURANT';
+        const form = {
                 pageNo: 1,
                 pageSize: 16,
                 total: 0,
-                resourceType: 'RESTAURANT',
-                cityId: '',
-                countryId: '',
-                countryCn: '',
-                cityCn: '',
+                resourceType,
+                ...store.state.play.play_search,
                 keywords: '',
                 sort: 1,
-                selectedLabels: [],
-                showCity: false,
-            },
-            tagList: [],
-            resourceTypes: RESOURCE_TYPE_TO_SERVER.map(v => {
-                    v['total'] = 0;
+                selectedLabels: [], // 已选择的标签
+            }
+        // 存储三种资源数量
+        let resourceTypes = RESOURCE_TYPE_TO_SERVER.map(v => {
+                                v['total'] = 0;
+                                return v;
+                            })
+        let tagList = []; // 标签列表
+        let datas = []; // 当前已选资源列表，默认餐厅
+        Axios.all(
+            sourceList($axios, form), 
+            sourceList($axios, {...form, resourceType: 'TICKETS'}), 
+            sourceList($axios, {...form, resourceType: 'CHARACTERISTIC_EXPERIENCE'}),
+            getTags($axios, resourceType), 
+        )
+        .then(Axios.spread((res, tickts, exp, tags) => {
+            console.log(res, tickts, exp, tags)
+            if (res.success) {
+                resourceTypes[0].total = res.data.total * 1;
+                datas = res.data.records.map(v => {
+                    v.uniqueTypeCode = v.uniqueTypeCode.split('/');
                     return v;
-                }),
-            };
+                });
+            }
+            if (tickts.success) {
+                resourceTypes[1].total = res.data.total * 1;
+            }
+            if (exp.success) {
+                resourceTypes[2].total = res.data.total * 1;
+            }
+            if(tags.success) {
+                tagList = tags.data.map(item => {
+                    // defaultOption是APP用的
+                    if (item.selectType === 'SINGLE_SELECT') {
+                        // 单选
+                        item['checkAll'] = true;
+                    } else if (item.selectType === 'MULTI_SELECT') {
+                        // 多选
+                        item['checkAll'] = false;
+                    }
+                    item.labelItems.map(v => {
+                        if (!v.flag) {
+                            v['flag'] = false;
+                        }
+                        return v;
+                    });
+                    return item;
+                });
+            }
+        }))
+        .catch(error => {
+            console.log(error)
+        })
+        return {
+            datas,
+            resourceTypes,
+            tagList,
+            form
+        }
     },
-    created() {
-        this.getTags(this.form.resourceType);
-        if (this.mixin_m_SStorage('has', 'play_search')) {
-            this.form = { ...this.form, ...this.mixin_m_SStorage('get', 'play_search') };
+    computed: {
+        ...mapState('play', ['play_search'])
+    },
+    mounted() {
+        if(this.tagList.length === 0) {
+            this.getTags(this.form.resourceType)
+        }
+        // store中play_search是初始值,这就说明是刷新过或者不是从玩乐首页过来的或玩乐从详情页过来的
+        if((!this.play_search || !this.play_search.countryId) && this.mixin_m_SStorage('has', 'play_search')) {
+            let play_search = this.mixin_m_SStorage('get', 'play_search');
+            this.SET_PLAY_SEARCH(play_search); // 恢复store
+            this.form = { ...this.form, ...play_search };
             this.initTotal();
+            this.getSourceList(this.form);
         } else {
             this.$router.replace('/play');
         }
     },
     methods: {
+        ...mapMutations('paly', ['SET_PLAY_SEARCH']),
         // 修改排序方式事件
         changeSort(n) {
             this.form.sort = n;
@@ -150,29 +216,28 @@ export default {
         },
         // 获取搜索附加条件
         getTags(resourceType) {
-            this.$axios({ ...API_PLAY.tags, params: { resourceType } }).then(res => {
-                if (res.success) {
-                    this.tagList = res.data.map(item => {
-                        // defaultOption是APP用的
-                        if (item.selectType === 'SINGLE_SELECT') {
-                            // 单选
-                            item['checkAll'] = true;
-                        } else if (item.selectType === 'MULTI_SELECT') {
-                            // 多选
-                            item['checkAll'] = false;
-                        }
-                        item.labelItems.map(v => {
-                            if (!v.flag) {
-                                v['flag'] = false;
+            this.$axios({ ...API_PLAY.tags, params: { resourceType } })
+                .then(res => {
+                    if (res.success) {
+                        this.tagList = res.data.map(item => {
+                            // defaultOption是APP用的
+                            if (item.selectType === 'SINGLE_SELECT') {
+                                // 单选
+                                item['checkAll'] = true;
+                            } else if (item.selectType === 'MULTI_SELECT') {
+                                // 多选
+                                item['checkAll'] = false;
                             }
-                            return v;
+                            item.labelItems.map(v => {
+                                if (!v.flag) {
+                                    v['flag'] = false;
+                                }
+                                return v;
+                            });
+                            return item;
                         });
-                        return item;
-                    });
-                } else {
-                    this.tagList = [];
-                }
-            });
+                    } else this.tagList = [];
+                });
         },
         // 切换价格排序图标
         priceType(n) {

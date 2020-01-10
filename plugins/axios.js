@@ -1,22 +1,23 @@
 import QS from 'qs';
 import { Message } from 'view-design';
+import * as axios from 'axios'
 
 const urlencoded = 'application/x-www-form-urlencoded;charset=UTF-8';
 const json = 'application/json;charset=UTF-8';
 
 function checkResp(blob, name) {
-  if ('msSaveOrOpenBlob' in navigator) {
-      // Microsoft Edge and Microsoft Internet Explorer 10-11
-      window.navigator.msSaveOrOpenBlob(blob, name);
-  } else {
-      // standard code for Google Chrome, Mozilla Firefox etc
-      let url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = name;
-      a.click();
-      window.URL.revokeObjectURL(a.href);
-  }
+	if ('msSaveOrOpenBlob' in navigator) {
+		// Microsoft Edge and Microsoft Internet Explorer 10-11
+		window.navigator.msSaveOrOpenBlob(blob, name);
+	} else {
+		// standard code for Google Chrome, Mozilla Firefox etc
+		let url = window.URL.createObjectURL(blob);
+		const a = document.createElement('a');
+		a.href = url;
+		a.download = name;
+		a.click();
+		window.URL.revokeObjectURL(a.href);
+	}
 }
 
 /* 只能使用this.$axios({})使用才能获取到自定义配置(@nuxt/axios版本更新,) */
@@ -28,7 +29,10 @@ export default function ({ $axios, app: { router, store }, route, redirect, next
             config.headers['Pragma'] = 'no-cache';
         }
         if(config.headers.token) {
-            if(store.state.login.logined && store.state.login.token) {
+			if(process.client && sessionStorage.token) {
+				config.headers['Authorization'] = sessionStorage.token;
+              	delete config.headers.token;
+			} else if(store.state.login.logined && store.state.login.token) {
               config.headers['Authorization'] = store.state.login.token;
               delete config.headers.token;
             } else {

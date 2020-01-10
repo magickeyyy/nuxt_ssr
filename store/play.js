@@ -11,6 +11,13 @@ export const state = () => ({
         contactName: '',
         contactTelPrefix: '86',
         contactTelephone: '',
+    },
+    play_search: { // 去搜索列表页
+        countryId: '',
+        countryCn: '',
+        cityId: '',
+        cityCn: '',
+        showCity: true,
     }
 });
 
@@ -27,5 +34,8 @@ export const mutations = {
                 state.npp[v] = data[v];
             }
         });
+    },
+    SET_PLAY_SEARCH(state, data) {
+        state.play_search = data;
     }
 };

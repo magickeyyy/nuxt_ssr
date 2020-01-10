@@ -28,7 +28,7 @@ module.exports = {
       {
         rel: 'stylesheet',
         type: 'text/css',
-        href: 'https://at.alicdn.com/t/font_1360760_m5i8wwqcqaq.css'
+        href: 'https://at.alicdn.com/t/font_1360760_x72ap3v8ab9.css'
       },
     ],
     script: [
@@ -36,7 +36,7 @@ module.exports = {
       {
         rel: 'script',
         type: 'text/javascript',
-        src: 'https://at.alicdn.com/t/font_1360760_m5i8wwqcqaq.js'
+        src: 'https://at.alicdn.com/t/font_1360760_x72ap3v8ab9.js'
       },
       {
         rel: 'script',

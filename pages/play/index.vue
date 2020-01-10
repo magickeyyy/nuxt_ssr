@@ -52,10 +52,11 @@
 // import Position_C from '@/components/play/index/positionChooes';
 import ChooseCountry from '~/components/play/index/ChooseCountry';
 import RES from '@/components/play/index/resShow';
-import BigSearch from '@/components/play/index/BigSearch';
+import BigSearch from '~/components/play/index/BigSearch';
 import { API_PLAY } from '@/assets/api/play';
 import { API_BASE } from '@/assets/api/public';
 import { RESOURCE_TYPE_TO_SERVER } from '@/assets/js/play'
+import { mapMutations } from 'vuex'
 
 export default {
     name: 'play',
@@ -80,6 +81,7 @@ export default {
         this.getList();
     },
     methods: {
+        ...mapMutations('play', [ 'SET_PLAY_SEARCH' ]),
         getList() {
             // 浏览历史是数组最多24条，每个类型最多八条
             let type = this.option;
@@ -124,13 +126,15 @@ export default {
                 // 选择下拉选项
                 const type = item.type;
                 if (type === 'city') {
-                    this.mixin_m_SStorage('set', 'play_search', {
+                    const play_search = {
                         countryId: item.destinationIdVO.countryId ? item.destinationIdVO.countryId : '',
                         countryCn: item.destinationNameVO.countryName ? item.destinationNameVO.countryName : '',
                         cityId: item.destinationIdVO.cityId ? item.destinationIdVO.cityId : '',
                         cityCn: item.destinationNameVO.cityName ? item.destinationNameVO.cityName : '',
                         showCity: true,
-                    });
+                    }
+                    this.mixin_m_SStorage('set', 'play_search', play_search);
+                    this.SET_PLAY_SEARCH(play_search);
                     this.$router.push({ name: 'play-list' });
                 } else {
                     let resourceId = item.destinationIdVO.resourceId * 1;
@@ -150,14 +154,16 @@ export default {
                 }
             } else {
                 // 点击搜索按钮
-                this.mixin_m_SStorage('set', 'play_search', {
+                const play_search = {
                     keywords, // 搜索关键字
                     countryId: '',
                     countryCn: '',
                     cityId: '',
                     cityCn: '',
                     showCity: false,
-                });
+                }
+                this.mixin_m_SStorage('set', 'play_search', play_search);
+                this.SET_PLAY_SEARCH(play_search);
                 this.$nuxt.$router.push({ name: 'play-list' });
             }
         },
