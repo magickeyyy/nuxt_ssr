@@ -10,7 +10,7 @@
             <aside>
                 <div class="map">
                     <img
-                        :src="`https://ditu.google.cn/maps/api/staticmap?center=${cityName.nameEn}&zoom=10&size=378x290&maptype=roadmap${mapMarks}&key=AIzaSyDOW8NW4egQT4QFsyLzaOlDR95ib12XywM`"
+                        :src="`https://ditu.google.cn/maps/api/staticmap?center=${cityName.nameEn}&size=378x290&maptype=roadmap${mapMarks}&key=AIzaSyDOW8NW4egQT4QFsyLzaOlDR95ib12XywM`"
                     />
                 </div>
                 <h3>缩小搜索范围</h3>

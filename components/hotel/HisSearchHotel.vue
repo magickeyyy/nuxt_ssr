@@ -260,7 +260,6 @@ export default {
                             v['value'] = v.id * 1
                             v['label'] = v.nameCn
                             v['loading'] = false
-                            v['index'] = i
                             v.id = v.id * 1
                             arr.push(v)
                         }
@@ -317,7 +316,8 @@ export default {
                             }
                         ]
                     }
-                    this.destinationList[item.index].children = citys
+                    let index =  this.destinationList.findIndex(v => v.id === item.id);
+                    this.destinationList[index].children = citys
                     // 如果加载的城市列表中有搜索历史中的城市就说明要回填
                     // this.form.destination会在created中初始化
                     let selectedCity = citys.find(
