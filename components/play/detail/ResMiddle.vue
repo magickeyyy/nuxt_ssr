@@ -321,7 +321,7 @@ export default {
                         };
                     }
                     sessionStorage.setItem('play_orderInfo', JSON.stringify(play_orderInfo));
-                    his.$router.push({ name: 'play-resOrder', query: { type: RESOURCE_TYPE_TO_SERVER[0].value}});
+                    this.$router.push({ name: 'play-resOrder', query: { type: RESOURCE_TYPE_TO_SERVER[0].value}});
                 }
             });
         },

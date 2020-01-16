@@ -173,7 +173,7 @@ export default {
                         },
                         resourceType: 'TICKETS',
                     });
-                    his.$router.push({ name: 'play-ticketOrder', query: { type: RESOURCE_TYPE_TO_SERVER[1].value}});
+                    this.$router.push({ name: 'play-ticketOrder', query: { type: RESOURCE_TYPE_TO_SERVER[1].value}});
                 }
             });
         },

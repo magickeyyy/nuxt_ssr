@@ -79,7 +79,7 @@ export default {
         Sort,
         Search,
     },
-    asyncData({isStatic, isDev, redirect, store, $axios, app}) {
+    async asyncData({isStatic, isDev, redirect, store, $axios, app}) {
         const resourceType = 'RESTAURANT';
         const form = {
                 pageNo: 1,
@@ -98,50 +98,50 @@ export default {
                             })
         let tagList = []; // 标签列表
         let datas = []; // 当前已选资源列表，默认餐厅
-        Axios.all(
-            sourceList($axios, form), 
-            sourceList($axios, {...form, resourceType: 'TICKETS'}), 
-            sourceList($axios, {...form, resourceType: 'CHARACTERISTIC_EXPERIENCE'}),
-            getTags($axios, resourceType), 
-        )
-        .then(Axios.spread((res, tickts, exp, tags) => {
-            console.log(res, tickts, exp, tags)
-            if (res.success) {
-                resourceTypes[0].total = res.data.total * 1;
-                datas = res.data.records.map(v => {
-                    v.uniqueTypeCode = v.uniqueTypeCode.split('/');
-                    return v;
-                });
-            }
-            if (tickts.success) {
-                resourceTypes[1].total = res.data.total * 1;
-            }
-            if (exp.success) {
-                resourceTypes[2].total = res.data.total * 1;
-            }
-            if(tags.success) {
-                tagList = tags.data.map(item => {
-                    // defaultOption是APP用的
-                    if (item.selectType === 'SINGLE_SELECT') {
-                        // 单选
-                        item['checkAll'] = true;
-                    } else if (item.selectType === 'MULTI_SELECT') {
-                        // 多选
-                        item['checkAll'] = false;
-                    }
-                    item.labelItems.map(v => {
-                        if (!v.flag) {
-                            v['flag'] = false;
+        await getTags($axios, resourceType)
+            .then(tags => {
+                if(tags.success) {
+                    tagList = tags.data.map(item => {
+                        // defaultOption是APP用的
+                        if (item.selectType === 'SINGLE_SELECT') {
+                            // 单选
+                            item['checkAll'] = true;
+                        } else if (item.selectType === 'MULTI_SELECT') {
+                            // 多选
+                            item['checkAll'] = false;
                         }
+                        item.labelItems.map(v => {
+                            if (!v.flag) {
+                                v['flag'] = false;
+                            }
+                            return v;
+                        });
+                        return item;
+                    });
+                }
+            })
+        await sourceList($axios, form)
+            .then(res => {
+                if (res.success) {
+                    resourceTypes[0].total = res.data.total * 1;
+                    datas = res.data.records.map(v => {
+                        v.uniqueTypeCode = v.uniqueTypeCode.split('/');
                         return v;
                     });
-                    return item;
-                });
-            }
-        }))
-        .catch(error => {
-            console.log(error)
-        })
+                }
+            })
+        await sourceList($axios, {...form, resourceType: 'TICKETS'})
+            .then(tickts => {
+                if (tickts.success) {
+                    resourceTypes[1].total = tickts.data.total * 1;
+                }
+            })
+        await sourceList($axios, {...form, resourceType: 'CHARACTERISTIC_EXPERIENCE'})
+            .then(exp => {
+                if (exp.success) {
+                    resourceTypes[2].total = exp.data.total * 1;
+                }
+            })
         return {
             datas,
             resourceTypes,
@@ -153,6 +153,7 @@ export default {
         ...mapState('play', ['play_search'])
     },
     mounted() {
+        // debugger
         if(this.tagList.length === 0) {
             this.getTags(this.form.resourceType)
         }
@@ -163,12 +164,10 @@ export default {
             this.form = { ...this.form, ...play_search };
             this.initTotal();
             this.getSourceList(this.form);
-        } else {
-            this.$router.replace('/play');
         }
     },
     methods: {
-        ...mapMutations('paly', ['SET_PLAY_SEARCH']),
+        ...mapMutations('play', ['SET_PLAY_SEARCH']),
         // 修改排序方式事件
         changeSort(n) {
             this.form.sort = n;
