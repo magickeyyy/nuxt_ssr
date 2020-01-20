@@ -35,10 +35,10 @@
 
 <script>
     import { API_HOTEL } from '~/assets/api/hotel';
-    import BScroll from '@better-scroll/core'
-import InfinityScroll from '@better-scroll/infinity'
-
-BScroll.use(InfinityScroll)
+    import BScroll from '@better-scroll/core';
+    import InfinityScroll from '@better-scroll/infinity';
+    BScroll.use(InfinityScroll);
+    const defimg = require('../../assets/public_img/no_img320-430.png');
     export default {
         layout() {
             return 'scroll'
@@ -67,14 +67,23 @@ BScroll.use(InfinityScroll)
         methods: {
             createInfinityScroll() {
                 this.scroll = new BScroll(this.$refs.chat, {
+                    scrollX: false,
+                    scrollY: true,
                     infinity: {
                         render: (item, div) => {
                             console.dir(div)
                             div = div || this.$refs.message.cloneNode(true)
-                            div.dataset.id = item.hotelId
-                            div.querySelector(
-                                '.infinity-avatar'
-                            ).src = item.hotelImageUrl;
+                            div.dataset.id = item.hotelId;
+                            let img = div.querySelector('.infinity-avatar');
+                            img.onerror = function() {
+                                let n = img.getAttribute('error');
+                                n?img.setAttribute('error', n++):(img.setAttribute('error', 1))
+                                img.src = defimg;
+                                if(n>2){
+                                    img.onerror = null;
+                                }
+                            };
+                            img.src = item.hotelImageUrl || 'error';
                             div.querySelector('.infinity-bubble h3').textContent = item.hotelName;
                             div.querySelector('.infinity-bubble p').textContent = item.addressChn;
                             div.querySelector('.first').textContent = item.supportFacilities;
@@ -159,15 +168,29 @@ BScroll.use(InfinityScroll)
 </script>
 
 <style scoped lang="less">
+*{
+    box-sizing: border-box;
+}
 @rpx: 0.01rem;
 .infinity{
     height: 100%;
-    padding: 16px;
+    background-color: #ccc;
 }
 .template{
     display: none;
 }
+.infinity-timeline{
+    height: 100vh;
+    overflow: hidden;
+    ul{
+        width: 100%;
+    }
+}
 .infinity-item{
+    width: 375*@rpx;
+    padding: 16px;
+    margin-bottom: 6*@rpx;
+    background-color: #fff;
     display: flex;
     justify-content: space-between;
     .infinity-avatar{
