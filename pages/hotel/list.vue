@@ -124,7 +124,7 @@
                     document.body.style.height = '';
                 }
             },
-             getHotelList() {
+            getHotelList() {
                 let data = this.formatForm(this.mixin_m_SStorage('get', 'hotel_search'));
                 data['pageSize'] = 100;
                 return this.$axios({...API_HOTEL.searchHotel, data}).then(res => {
