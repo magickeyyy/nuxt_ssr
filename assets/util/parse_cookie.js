@@ -1,4 +1,4 @@
-export default function parse_cookie(cookie) {
+export default function parse_cookie(cookie='') {
     let arr = cookie.split(';');
     let obj = {};
     arr.map(v => {
